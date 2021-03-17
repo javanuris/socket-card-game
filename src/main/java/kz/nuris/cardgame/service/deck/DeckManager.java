@@ -1,5 +1,6 @@
 package kz.nuris.cardgame.service.deck;
 
+import kz.nuris.cardgame.execptions.CardGameException;
 import kz.nuris.cardgame.service.deck.model.Card;
 import kz.nuris.cardgame.service.deck.model.Deck;
 
@@ -16,23 +17,29 @@ public class DeckManager {
     /**
      * Shuffle deck
      */
+    //TODO test
     public void shuffle() {
         Collections.shuffle(deck.getCards());
     }
 
     /**
-     * Take first card from the deck and if null then throw exception
+     * Take first card from the deck
+     * If null throw exception
      */
-    public Card takeOrBlow() {
+    //TODO test
+    public Card takeCardOrBlow() {
         var cards = deck.getCards();
-        Card card = cards.stream().findFirst().orElseThrow();
+        Card card = cards.stream().findFirst().orElseThrow(() -> {
+            throw new CardGameException(CardGameException.CardGameExceptionCode.DECK_IS_EMPTY);
+        });
         cards.remove(card);
         return card;
     }
 
     /**
      * Return card count on the deck
-     * */
+     */
+    //TODO test
     public Integer count() {
         return deck.getCards().size();
     }
