@@ -1,4 +1,4 @@
-package kz.nuris.cardgame.service.game;
+package kz.nuris.cardgame.service.game.gametype;
 
 import kz.nuris.cardgame.execptions.CardGameException;
 import kz.nuris.cardgame.service.game.model.CardPlayerResult;
@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class CardGame2PlayerAbstract implements ICardGame2Player {
+import static kz.nuris.cardgame.service.game.CardGameConst.*;
 
-    private static final int PLAYER_COUNT = 2;
+public abstract class CardGame2PlayerAbstract implements CardGame2Player {
 
     //TODO test
     @Override
@@ -24,51 +24,52 @@ public abstract class CardGame2PlayerAbstract implements ICardGame2Player {
         var firstPlayer = players.get(FIRST_PLAYER);
         var secondPlayer = players.get(SECOND_PLAYER);
 
-        var analyseDecisionResult = analysePlayersDecision(firstPlayer, secondPlayer);
+        var analyseDecisionResult = analyseDecisions(firstPlayer, secondPlayer);
 
-        GameResult firstPlayerResult = analyseDecisionResult.get(FIRST_PLAYER);
-        GameResult secondPlayerResult = analyseDecisionResult.get(SECOND_PLAYER);
+        GameResult fpResult = analyseDecisionResult.get(FIRST_PLAYER);
+        GameResult spResult = analyseDecisionResult.get(SECOND_PLAYER);
 
         var result = new ArrayList<CardPlayerResult>();
-        result.add(new CardPlayerResult(firstPlayer.getPlayer(), firstPlayerResult));
-        result.add(new CardPlayerResult(secondPlayer.getPlayer(), secondPlayerResult));
+        result.add(new CardPlayerResult(firstPlayer.getPlayer(), fpResult));
+        result.add(new CardPlayerResult(secondPlayer.getPlayer(), spResult));
 
         return result;
     }
 
     //TODO test
-    private Map<Integer, GameResult> analysePlayersDecision(CardPlayerTurn firstPlayer,
-                                                           CardPlayerTurn secondPlayer) {
+    private Map<Integer, GameResult> analyseDecisions(CardPlayerTurn firstPlayer,
+                                                      CardPlayerTurn secondPlayer) {
 
         var result = new HashMap<Integer, GameResult>();
 
-        GameResult firstPlayerResult;
-        GameResult secondPlayerResult;
+        GameResult fpResult;
+        GameResult spResult;
 
         if (firstPlayer.getDecision() == Decision.FOLD
                 && secondPlayer.getDecision() == Decision.FOLD) {
-            firstPlayerResult = GameResult.DRAW;
-            secondPlayerResult = GameResult.DRAW;
+            fpResult = GameResult.FOLD_DRAW;
+            spResult = GameResult.FOLD_DRAW;
         } else if (firstPlayer.getDecision() == Decision.FOLD
                 && secondPlayer.getDecision() == Decision.PLAY) {
-            firstPlayerResult = GameResult.BLIND_LOSE;
-            secondPlayerResult = GameResult.BLIND_WIN;
+            fpResult = GameResult.FOLD_LOSE;
+            spResult = GameResult.FOLD_WIN;
         } else if (firstPlayer.getDecision() == Decision.PLAY
                 && secondPlayer.getDecision() == Decision.FOLD) {
-            firstPlayerResult = GameResult.BLIND_WIN;
-            secondPlayerResult = GameResult.BLIND_LOSE;
+            fpResult = GameResult.FOLD_WIN;
+            spResult = GameResult.FOLD_LOSE;
         } else {
+
             var winnerAndLoser = defineWinnerAndLoser(firstPlayer, secondPlayer);
-            firstPlayerResult = winnerAndLoser.get(FIRST_PLAYER);
-            secondPlayerResult = winnerAndLoser.get(SECOND_PLAYER);
+
+            fpResult = winnerAndLoser.get(FIRST_PLAYER);
+            spResult = winnerAndLoser.get(SECOND_PLAYER);
         }
 
-        result.put(FIRST_PLAYER, firstPlayerResult);
-        result.put(SECOND_PLAYER, secondPlayerResult);
+        result.put(FIRST_PLAYER, fpResult);
+        result.put(SECOND_PLAYER, spResult);
 
         return result;
     }
-
 
 
 }

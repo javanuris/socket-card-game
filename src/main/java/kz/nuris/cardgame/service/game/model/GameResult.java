@@ -4,6 +4,7 @@ public enum GameResult {
     WIN,
     DRAW,
     LOSE,
-    BLIND_LOSE,
-    BLIND_WIN
+    FOLD_LOSE,
+    FOLD_WIN,
+    FOLD_DRAW
 }

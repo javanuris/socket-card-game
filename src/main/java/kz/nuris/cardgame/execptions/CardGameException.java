@@ -23,7 +23,9 @@ public class CardGameException extends RuntimeException {
         SYSTEM_EXCEPTION,
         DECK_IS_EMPTY,
         VALIDATION_ERROR,
-        CARD_GAME_ROLE;
+        CARD_GAME_ROLE,
+        ALREADY_EXIST,
+        NOT_FOUND
     }
 
 }

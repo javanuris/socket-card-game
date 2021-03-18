@@ -5,6 +5,6 @@ import kz.nuris.cardgame.service.game.model.CardPlayerTurn;
 
 import java.util.List;
 
-public interface ICardGame {
+public interface CardGame {
     List<CardPlayerResult> play(List<CardPlayerTurn> players);
 }

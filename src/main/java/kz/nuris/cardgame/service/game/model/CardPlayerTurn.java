@@ -13,6 +13,6 @@ import java.util.List;
 @ToString
 public class CardPlayerTurn {
     private Player player;
-    private Decision decision;
     private List<Card> hand;
+    private Decision decision;
 }
