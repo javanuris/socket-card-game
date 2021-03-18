@@ -11,15 +11,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class CardGameAbstract implements ICardGame {
+public abstract class CardGame2PlayerAbstract implements ICardGame2Player {
 
-    private final int FIRST_PLAYER = 0;
-    private final int SECOND_PLAYER = 1;
+    private static final int PLAYER_COUNT = 2;
 
     //TODO test
     @Override
     public List<CardPlayerResult> play(List<CardPlayerTurn> players) {
-        if (players.size() != 2) {
+        if (players.size() != PLAYER_COUNT) {
             throw new CardGameException(CardGameException.CardGameExceptionCode.CARD_GAME_ROLE);
         }
         var firstPlayer = players.get(FIRST_PLAYER);
@@ -59,9 +58,9 @@ public abstract class CardGameAbstract implements ICardGame {
             firstPlayerResult = GameResult.BLIND_WIN;
             secondPlayerResult = GameResult.BLIND_LOSE;
         } else {
-            var checkHandsResult = checkHands(firstPlayer, secondPlayer);
-            firstPlayerResult = checkHandsResult.get(FIRST_PLAYER);
-            secondPlayerResult = checkHandsResult.get(SECOND_PLAYER);
+            var winnerAndLoser = defineWinnerAndLoser(firstPlayer, secondPlayer);
+            firstPlayerResult = winnerAndLoser.get(FIRST_PLAYER);
+            secondPlayerResult = winnerAndLoser.get(SECOND_PLAYER);
         }
 
         result.put(FIRST_PLAYER, firstPlayerResult);
@@ -70,9 +69,6 @@ public abstract class CardGameAbstract implements ICardGame {
         return result;
     }
 
-    public Map<Integer, GameResult> checkHands(CardPlayerTurn firstPlayer,
-                                       CardPlayerTurn secondPlayer) {
-        return null;
-    }
+
 
 }

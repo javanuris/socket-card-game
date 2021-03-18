@@ -1,6 +1,6 @@
 package kz.nuris.cardgame.service.game.impl;
 
-import kz.nuris.cardgame.service.game.CardGameAbstract;
+import kz.nuris.cardgame.service.game.CardGame2PlayerAbstract;
 import kz.nuris.cardgame.service.game.model.CardPlayerTurn;
 import kz.nuris.cardgame.service.game.model.GameResult;
 import org.springframework.stereotype.Service;
@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-public class DoubleCardGame extends CardGameAbstract {
+public class DoubleCardGame extends CardGame2PlayerAbstract {
 
     @Override
-    public Map<Integer, GameResult> checkHands(CardPlayerTurn firstPlayer, CardPlayerTurn secondPlayer) {
-        return super.checkHands(firstPlayer, secondPlayer);
+    public Map<Integer, GameResult> defineWinnerAndLoser(CardPlayerTurn firstPlayer,
+                                                         CardPlayerTurn secondPlayer) {
+        return null;
     }
 }
