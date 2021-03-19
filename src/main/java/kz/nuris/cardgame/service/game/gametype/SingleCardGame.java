@@ -34,4 +34,8 @@ public class SingleCardGame extends CardGame2PlayerAbstract {
         return role.check(fpHand, spHand);
     }
 
+    @Override
+    public int cardCountInHand() {
+        return 1;
+    }
 }

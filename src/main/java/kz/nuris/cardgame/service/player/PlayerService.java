@@ -11,30 +11,33 @@ import java.util.*;
 public class PlayerService {
 
     //TODO add pessimistic lock db
-    public Player getById(Long id) {
-        return players.get(id);
+    public Player getByIdOrBlow(Long id) {
+        var player = players.get(id);
+        //data checking ORM or DB side
+        if (player == null) {
+            throw new CardGameException("player id: " + id, CardGameException.CardGameExceptionCode.NOT_FOUND);
+        }
+        return player;
     }
 
     public synchronized Player minusToken(Long payerId, BigDecimal delta) {
-        var player = getById(payerId);
+        var player = getByIdOrBlow(payerId);
         player.setTokens(player.getTokens().subtract(delta));
         updateOrBlow(player);
         return player;
     }
 
     public synchronized Player plusToken(Long payerId, BigDecimal delta) {
-        var player = getById(payerId);
+        var player = getByIdOrBlow(payerId);
         player.setTokens(player.getTokens().add(delta));
         updateOrBlow(player);
         return player;
     }
 
     public void saveOrBlow(Player player) {
-        //data checking ORM or DB side
         if (player == null || player.getTokens() == null || player.getId() == null || player.getName() == null) {
             throw new CardGameException(CardGameException.CardGameExceptionCode.VALIDATION_ERROR);
         }
-        //data checking ORM or DB side
         if (players.get(player.getId()) != null) {
             throw new CardGameException(CardGameException.CardGameExceptionCode.ALREADY_EXIST);
         }
@@ -43,14 +46,11 @@ public class PlayerService {
     }
 
     public void updateOrBlow(Player player) {
-        //data checking ORM or DB side
         if (player == null || player.getTokens() == null || player.getId() == null || player.getName() == null) {
             throw new CardGameException(CardGameException.CardGameExceptionCode.VALIDATION_ERROR);
         }
-        //data checking ORM or DB side
-        if (players.get(player.getId()) == null) {
-            throw new CardGameException(CardGameException.CardGameExceptionCode.NOT_FOUND);
-        }
+
+        getByIdOrBlow(player.getId());
 
         players.put(player.getId(), player);
     }

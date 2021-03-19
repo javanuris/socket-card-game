@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CardGame {
     List<CardPlayerResult> play(List<CardPlayerTurn> players);
+
+    int cardCountInHand();
 }

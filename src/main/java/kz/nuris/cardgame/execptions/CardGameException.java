@@ -25,7 +25,8 @@ public class CardGameException extends RuntimeException {
         VALIDATION_ERROR,
         CARD_GAME_ROLE,
         ALREADY_EXIST,
-        NOT_FOUND
+        NOT_FOUND,
+        SESSION_ERROR
     }
 
 }

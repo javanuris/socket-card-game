@@ -49,4 +49,9 @@ public class DoubleCardGame extends CardGame2PlayerAbstract {
 
         return result;
     }
+
+    @Override
+    public int cardCountInHand() {
+        return 2;
+    }
 }
