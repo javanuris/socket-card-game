@@ -3,15 +3,23 @@ package kz.nuris.cardgame.service.deck;
 import kz.nuris.cardgame.execptions.CardGameException;
 import kz.nuris.cardgame.service.deck.model.Card;
 import kz.nuris.cardgame.service.deck.model.Deck;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 
+@Service
+@RequiredArgsConstructor
 public class DeckManager {
+
+    private final DeckService deckService;
 
     private Deck deck;
 
-    public DeckManager(Deck deck) {
-        this.deck = deck;
+    @PostConstruct
+    private void init() {
+        deck = deckService.getDeck();
     }
 
     /**

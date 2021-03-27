@@ -4,13 +4,15 @@ import kz.nuris.cardgame.execptions.CardGameException;
 import kz.nuris.cardgame.service.game.gametype.role.CardGame2PlayerRole;
 import kz.nuris.cardgame.service.game.model.CardPlayerTurn;
 import kz.nuris.cardgame.service.game.model.GameResult;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Qualifier(GameType.SINGLE_CARD_GAME)
 public class SingleCardGame extends CardGame2PlayerAbstract {
 
     private final CardGame2PlayerRole role;

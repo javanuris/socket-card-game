@@ -7,9 +7,9 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
 public class Deck {
     private List<Card> cards = new ArrayList<>();
 

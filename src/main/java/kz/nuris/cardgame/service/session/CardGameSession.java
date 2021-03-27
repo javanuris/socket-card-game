@@ -9,40 +9,35 @@ import kz.nuris.cardgame.service.game.model.CardPlayerResult;
 import kz.nuris.cardgame.service.game.model.CardPlayerTurn;
 import kz.nuris.cardgame.service.player.PlayerService;
 import kz.nuris.cardgame.service.player.model.Player;
+import lombok.RequiredArgsConstructor;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 public class CardGameSession {
-    private final CardGame cardGame;
     private final PlayerService playerService;
     private final DeckManager deckManager;
+    private final CardGame cardGame;
     private final List<Player> players;
 
     //in session
-    private final Map<Player, CardPlayerTurn> turnSession;
+    private  Map<Player, CardPlayerTurn> turnSession;
     //in session
-    private final Map<Player, CardPlayerResult> resultSession;
+    private  Map<Player, CardPlayerResult> resultSession;
     //in session
-    private final Map<Player, CardPlayerHand> handSession;
+    private  Map<Player, CardPlayerHand> handSession;
 
-    public CardGameSession(CardGame cardGame,
-                           PlayerService playerService,
-                           DeckManager deckManager,
-                           List<Player> players) {
-        this.cardGame = cardGame;
-        this.playerService = playerService;
-        this.deckManager = deckManager;
-        this.players = players;
-
+    @PostConstruct
+    public void init(){
         turnSession = new HashMap<>();
         resultSession = new HashMap<>();
         handSession = new HashMap<>();
         deckManager.shuffle();
     }
-
     public boolean emptyDeck() {
         return deckManager.count() == 0;
     }
@@ -55,7 +50,7 @@ public class CardGameSession {
                 for (int i = 0; i < cardGame.cardCountInHand(); i++) {
                     hand.add(deckManager.takeCardOrBlow());
                 }
-                handSession.put(player, new CardPlayerHand(player,hand));
+                handSession.put(player, new CardPlayerHand(player, hand));
             } else {
                 throw new CardGameException(CardGameException.CardGameExceptionCode.SESSION_ERROR);
             }

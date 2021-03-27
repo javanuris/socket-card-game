@@ -4,7 +4,8 @@ import kz.nuris.cardgame.execptions.CardGameException;
 import kz.nuris.cardgame.service.game.gametype.role.CardGame2PlayerRole;
 import kz.nuris.cardgame.service.game.model.CardPlayerTurn;
 import kz.nuris.cardgame.service.game.model.GameResult;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -13,7 +14,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Qualifier(GameType.DOUBLE_CARD_GAME)
 public class DoubleCardGame extends CardGame2PlayerAbstract {
 
     private final CardGame2PlayerRole role;
