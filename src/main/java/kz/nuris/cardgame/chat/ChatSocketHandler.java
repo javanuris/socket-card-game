@@ -71,10 +71,8 @@ public class ChatSocketHandler {
         var username = chatMessage.getSender();
         var gameType = chatMessage.getGameType();
         var tokens = chatMessage.getTokens();
-
         headerAccessor.getSessionAttributes().put("username", username);
         try {
-
             var player = new Player(ThreadLocalRandom.current().nextLong(), username, tokens);
             playerService.saveOrBlow(player);
             playersInRoom.put(player, sessionId);
@@ -96,6 +94,7 @@ public class ChatSocketHandler {
             }
         } catch (CardGameException e) {
             sendingOperations.sendError(playersInRoom, e.getCode());
+            log.error(e);
         }
     }
 
@@ -148,6 +147,7 @@ public class ChatSocketHandler {
             }
         } catch (CardGameException e) {
             sendingOperations.sendError(playersInRoom, e.getCode());
+            log.error(e);
         }
     }
 
