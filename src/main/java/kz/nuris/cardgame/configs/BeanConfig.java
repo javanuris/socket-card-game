@@ -1,10 +1,10 @@
 package kz.nuris.cardgame.configs;
 
 import kz.nuris.cardgame.execptions.CardGameException;
+import kz.nuris.cardgame.service.billing.BillingService;
 import kz.nuris.cardgame.service.deck.DeckManager;
 import kz.nuris.cardgame.service.game.CardGame;
 import kz.nuris.cardgame.service.game.gametype.GameType;
-import kz.nuris.cardgame.service.player.PlayerService;
 import kz.nuris.cardgame.service.player.model.Player;
 import kz.nuris.cardgame.service.session.CardGameSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +20,6 @@ import java.util.List;
 public class BeanConfig {
 
     @Autowired
-    private PlayerService playerService;
-
-    @Autowired
     private DeckManager deckManager;
 
     @Autowired
@@ -33,13 +30,22 @@ public class BeanConfig {
     @Qualifier(GameType.DOUBLE_CARD_GAME)
     private CardGame cardGameDouble;
 
+    @Autowired
+    @Qualifier("SingleCardGameBillingService")
+    private BillingService singleCardGameBillingService;
+
+    @Autowired
+    @Qualifier("DoubleCardGameBillingService")
+    private BillingService doubleCardGameBillingService;
+
+    //fabric method
     @Bean
     @Scope(BeanDefinition.SCOPE_PROTOTYPE)
     public CardGameSession factoryMethod(String arg, List<Player> players) {
         if (arg.equals("single")) {
-            return new CardGameSession(playerService, deckManager, cardGameSingle,players);
+            return new CardGameSession(deckManager, cardGameSingle, singleCardGameBillingService, players);
         } else if (arg.equals("double")) {
-            return new CardGameSession(playerService, deckManager, cardGameDouble,players);
+            return new CardGameSession(deckManager, cardGameDouble, doubleCardGameBillingService, players);
         } else {
             throw new CardGameException(CardGameException.CardGameExceptionCode.SYSTEM_EXCEPTION);
         }

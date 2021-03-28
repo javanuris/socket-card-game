@@ -2,10 +2,16 @@
 
 let stompClient
 let username
+let gameType
+let tokens
+
 var sessionId = "";
 
 const connect = (event) => {
     username = document.querySelector('#username').value.trim()
+    gameType = document.querySelector('#gameType').value.trim()
+    tokens = document.querySelector('#tokens').value
+
 
     if (username) {
         const login = document.querySelector('#login')
@@ -23,26 +29,26 @@ const connect = (event) => {
             console.log("url: " + url);
 
             url = url.replace(
-                "ws://localhost:8080/secured/room/",  "");
+                "ws://localhost:8080/secured/room/", "");
             url = url.replace("/websocket", "");
             url = url.replace(/^[0-9]+\//, "");
             console.log("Your current session is: " + url);
             sessionId = url;
             onConnected();
-        },onError);
+        }, onError);
     }
     event.preventDefault()
 }
 
 
 const onConnected = options => {
-    console.log("Your session is: " +sessionId);
+    console.log("Your session is: " + sessionId);
 
-    stompClient.subscribe('/secured/user/queue/specific-user' + '-user' +sessionId, onMessageReceived)
+    stompClient.subscribe('/secured/user/queue/specific-user' + '-user' + sessionId, onMessageReceived)
 
-    stompClient.send("/chat.newUser",
+    stompClient.send("/chat.registerUser",
         {},
-        JSON.stringify({sender: username, type: 'CONNECT'})
+        JSON.stringify({sender: username, type: 'CONNECT', tokens: tokens, gameType: gameType})
     );
 
     const status = document.querySelector('#status')
@@ -62,11 +68,11 @@ const sendMessage = (event) => {
     if (messageContent && stompClient) {
         const chatMessage = {
             sender: username,
-            content: messageInput.value,
+            decision: messageInput.value,
             type: 'CHAT',
             time: moment().calendar()
         }
-        stompClient.send('/chat.send' ,{}, JSON.stringify(chatMessage))
+        stompClient.send('/chat.decision', {}, JSON.stringify(chatMessage))
         messageInput.value = ''
     }
     event.preventDefault();
@@ -91,10 +97,13 @@ const onMessageReceived = (payload) => {
 
     if (message.type === 'CONNECT') {
         messageElement.classList.add('event-message')
-        message.content = message.sender + ' connected!'
+        message.content = message.sender + ' in the room!'
     } else if (message.type === 'DISCONNECT') {
         messageElement.classList.add('event-message')
-        message.content = message.sender + ' left!'
+        message.content = message.sender + ' left the room!'
+    } else if (message.type === 'INFO') {
+        messageElement.classList.add('event-message')
+        message.content = 'Balance:' + message.content + ' tokens'
     } else {
         messageElement.classList.add('chat-message')
 
@@ -118,7 +127,13 @@ const onMessageReceived = (payload) => {
 
     }
 
-    messageElement.innerHTML = message.content
+    if (message.type === 'RESULT') {
+        messageElement.style['background-color'] =  '#C60037'
+        messageElement.innerHTML = "Game result: " + message.content
+
+    } else {
+        messageElement.innerHTML = message.content
+    }
 
     const chat = document.querySelector('#chat')
     chat.appendChild(flexBox)
@@ -128,7 +143,7 @@ const onMessageReceived = (payload) => {
 const hashCode = (str) => {
     let hash = 0
     for (let i = 0; i < str.length; i++) {
-       hash = str.charCodeAt(i) + ((hash << 5) - hash)
+        hash = str.charCodeAt(i) + ((hash << 5) - hash)
     }
     return hash
 }

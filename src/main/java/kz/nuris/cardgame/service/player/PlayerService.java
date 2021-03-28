@@ -20,6 +20,16 @@ public class PlayerService {
         return player;
     }
 
+    public Player getByNameOrBlow(String name) {
+        var player = players.values().stream().filter(x -> x.getName().equals(name)).findFirst().get();
+        //data checking ORM or DB side
+        if (player == null) {
+            throw new CardGameException("player name: " + name, CardGameException.CardGameExceptionCode.NOT_FOUND);
+        }
+        return player;
+    }
+
+
     public synchronized Player minusToken(Long payerId, BigDecimal delta) {
         var player = getByIdOrBlow(payerId);
         player.setTokens(player.getTokens().subtract(delta));
