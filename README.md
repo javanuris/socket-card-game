@@ -6,7 +6,7 @@ demo: https://www.youtube.com/watch?v=xmC47ePi8eg&ab_channel=NurisArt
 - Maximum number of players: 2
 - Players must choose the same type of game.
 - You need to restart the application if you want to play the game again.
-- The data is reset after restarting the game.
+- The data is reset after restarting the application.
 ## Key design decisions made:
 - 3-layer architecture.
 - CardGame interface is used for the pattern Factory Method.
