@@ -27,22 +27,25 @@ public class CardGameSession {
     private final BillingService billingService;
     private final List<Player> players;
 
-    private Map<Player, CardPlayerHand> currentPlayersHand;
+    private Map<Player, CardPlayerHand> playersHandState;
 
     @PostConstruct
     public void init() {
-        currentPlayersHand = new HashMap<>();
+        playersHandState = new HashMap<>();
         deckManager.shuffle();
     }
 
-    public boolean isEmptyDeck() {
+    public boolean isDeckEmpty() {
         return deckManager.count() == 0;
     }
 
     public synchronized List<CardPlayerHand> dealCards() {
+        if (isDeckEmpty()) {
+            throw new CardGameException(CardGameException.CardGameExceptionCode.SESSION_ERROR);
+        }
         var playerHand = new ArrayList<CardPlayerHand>();
         players.forEach(player -> {
-            if (currentPlayersHand.get(player) != null) {
+            if (playersHandState.get(player) != null) {
                 throw new CardGameException(CardGameException.CardGameExceptionCode.SESSION_ERROR);
             } else {
                 List<Card> hand = new ArrayList<>();
@@ -51,7 +54,7 @@ public class CardGameSession {
                 }
                 var temp = new CardPlayerHand(player, hand);
                 playerHand.add(temp);
-                currentPlayersHand.put(player, temp);
+                playersHandState.put(player, temp);
             }
         });
         return playerHand;
@@ -60,17 +63,17 @@ public class CardGameSession {
     public synchronized List<CardPlayerResult> play(List<CardPlayerDecision> turns) {
 
         var temp = turns.stream().map(x -> {
-            if (currentPlayersHand.get(x.getPlayer()) == null) {
+            if (playersHandState.get(x.getPlayer()) == null) {
                 throw new CardGameException(CardGameException.CardGameExceptionCode.SESSION_ERROR);
             }
 
             var turn = new CardPlayerTurn();
             turn.setPlayer(x.getPlayer());
             turn.setDecision(x.getDecision());
-            turn.setHand(currentPlayersHand.get(x.getPlayer()).getHand());
+            turn.setHand(playersHandState.get(x.getPlayer()).getHand());
 
-            //open for new deal
-            currentPlayersHand.remove(x.getPlayer());
+            //clean hand state for new deal
+            playersHandState.remove(x.getPlayer());
 
             return turn;
         }).collect(Collectors.toList());

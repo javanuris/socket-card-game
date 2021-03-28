@@ -84,7 +84,8 @@ public class ChatHandler {
         playersInRoom.put(player, sessionId);
         gameTypeCounter.put(gameType, gameTypeCounter.getOrDefault(gameType, 0) + 1);
 
-        sendMessage(playersInRoom.get(player), chatMessage);
+        playersInRoom.forEach((x, y) -> sendMessage(playersInRoom.get(x), chatMessage));
+
         sendBalanceInfo(player.getId());
 
 

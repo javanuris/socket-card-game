@@ -38,13 +38,12 @@ public class BeanConfig {
     @Qualifier("DoubleCardGameBillingService")
     private BillingService doubleCardGameBillingService;
 
-    //fabric method
     @Bean
     @Scope(BeanDefinition.SCOPE_PROTOTYPE)
     public CardGameSession factoryMethod(String arg, List<Player> players) {
-        if (arg.equals("single")) {
+        if (arg.equals(GameType.SINGLE_CARD_GAME)) {
             return new CardGameSession(deckManager, cardGameSingle, singleCardGameBillingService, players);
-        } else if (arg.equals("double")) {
+        } else if (arg.equals(GameType.DOUBLE_CARD_GAME)) {
             return new CardGameSession(deckManager, cardGameDouble, doubleCardGameBillingService, players);
         } else {
             throw new CardGameException(CardGameException.CardGameExceptionCode.SYSTEM_EXCEPTION);
