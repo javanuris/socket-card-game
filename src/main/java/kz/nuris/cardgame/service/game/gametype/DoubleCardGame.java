@@ -20,6 +20,7 @@ public class DoubleCardGame extends CardGame2PlayerAbstract {
 
     private final CardGame2PlayerRole role;
 
+    //template method
     //TODO test
     @Override
     public Map<Integer, GameResult> defineWinnerAndLoser(CardPlayerTurn firstPlayer,

@@ -128,14 +128,15 @@ const onMessageReceived = (payload) => {
     }
 
     if (message.type === 'RESULT') {
-        messageElement.style['background-color'] =  '#C60037'
+        messageElement.style['background-color'] = '#000ec6'
         messageElement.innerHTML = "Game result: " + message.content
-
-    } else if(message.type === 'FINISH'){
-        messageElement.style['background-color'] =  '#aac601'
-        messageElement.innerHTML = "Finish!!! Balance is: " + message.content
-
-    }else {
+    } else if (message.type === 'FINISH') {
+        messageElement.style['background-color'] = '#aac601'
+        messageElement.innerHTML = "Finish... Balance is: " + message.content
+    } else if (message.type === 'ERROR') {
+        messageElement.style['background-color'] = '#c60800'
+        messageElement.innerHTML = "ERROR!!! " + message.content
+    } else {
         messageElement.innerHTML = message.content
     }
 
