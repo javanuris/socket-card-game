@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CardGameSession {
 
+    public final static int MIN_PLAYERS_COUNT = 2;
+
     private final DeckManager deckManager;
     private final CardGame cardGame;
     private final BillingService billingService;

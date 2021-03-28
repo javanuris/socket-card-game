@@ -51,7 +51,8 @@ public class ChatSocketHandler {
     public void handleWebSocketEventDisconnectListener(final SessionDisconnectEvent event) {
 
         final StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        final String username = (String) Objects.requireNonNull(headerAccessor.getSessionAttributes()).get("username");
+        final String username =
+                (String) Objects.requireNonNull(headerAccessor.getSessionAttributes()).get("username");
 
         log.info("disconnect username: " + username);
 
@@ -79,12 +80,11 @@ public class ChatSocketHandler {
             playersInRoom.put(player, sessionId);
             gameTypeCounter.put(gameType, gameTypeCounter.getOrDefault(gameType, 0) + 1);
 
-
             sendingOperations.sendConnect(username, playersInRoom);
             sendingOperations.sendBalanceInfo(player.getId(), playersInRoom);
 
 
-            if (playersInRoom.size() > 1
+            if (playersInRoom.size() >= CardGameSession.MIN_PLAYERS_COUNT
                     && gameTypeCounter.get(gameType) == playersInRoom.size()) {
 
                 if (cardGameSession == null) {
@@ -138,7 +138,8 @@ public class ChatSocketHandler {
                         playersDecision.clear();
 
                         if (cardGameSession.isDeckEmpty()) {
-                            result.forEach(x -> sendingOperations.sendFinish(x.getPlayer().getId(), playersInRoom));
+                            result.forEach(x ->
+                                    sendingOperations.sendFinish(x.getPlayer().getId(), playersInRoom));
                         } else {
                             sendingOperations.sendDealCard(cardGameSession, playersInRoom);
                         }

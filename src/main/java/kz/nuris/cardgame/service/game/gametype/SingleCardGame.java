@@ -14,6 +14,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Qualifier(GameType.SINGLE_CARD_GAME)
 public class SingleCardGame extends CardGame2PlayerAbstract {
+    private final static int CARD_COUNT =1;
 
     private final CardGame2PlayerRole role;
 
@@ -39,6 +40,6 @@ public class SingleCardGame extends CardGame2PlayerAbstract {
 
     @Override
     public int cardCountInHand() {
-        return 1;
+        return CARD_COUNT;
     }
 }

@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 @Qualifier(GameType.DOUBLE_CARD_GAME)
 public class DoubleCardGame extends CardGame2PlayerAbstract {
 
+    private final static int CARD_COUNT =2;
+
     private final CardGame2PlayerRole role;
 
     //template method
@@ -55,6 +57,6 @@ public class DoubleCardGame extends CardGame2PlayerAbstract {
 
     @Override
     public int cardCountInHand() {
-        return 2;
+        return CARD_COUNT;
     }
 }
