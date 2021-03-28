@@ -5,5 +5,6 @@ public enum MessageType {
     CONNECT,
     DISCONNECT,
     INFO,
-    RESULT
+    RESULT,
+    FINISH
 }

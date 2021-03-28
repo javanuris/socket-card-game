@@ -131,7 +131,11 @@ const onMessageReceived = (payload) => {
         messageElement.style['background-color'] =  '#C60037'
         messageElement.innerHTML = "Game result: " + message.content
 
-    } else {
+    } else if(message.type === 'FINISH'){
+        messageElement.style['background-color'] =  '#aac601'
+        messageElement.innerHTML = "Finish!!! Balance is: " + message.content
+
+    }else {
         messageElement.innerHTML = message.content
     }
 

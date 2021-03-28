@@ -52,10 +52,10 @@ public class ChatHandler {
 
     @EventListener
     public void handleWebSocketEventDisconnectListener(final SessionDisconnectEvent event) {
-        log.info("disconnect");
 
         final StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         final String username = (String) Objects.requireNonNull(headerAccessor.getSessionAttributes()).get("username");
+        log.info("disconnect username: " + username);
 
         playersInRoom.remove(new Player(username));
 
@@ -134,7 +134,11 @@ public class ChatHandler {
 
                     playersDecision.clear();
 
-                    sendDealCard(cardGameSession);
+                    if (cardGameSession.isDeckEmpty()) {
+                        result.forEach(x -> sendFinish(x.getPlayer().getId()));
+                    } else {
+                        sendDealCard(cardGameSession);
+                    }
                 }
             }
         }
@@ -171,6 +175,16 @@ public class ChatHandler {
         var player = playerService.getByIdOrBlow(playerId);
         var message = new MessageResponse();
         message.setType(MessageType.INFO);
+        message.setContent(playerService.getByIdOrBlow(player.getId()).getTokens().toString());
+        message.setSender(player.getName());
+        simpMessageSendingOperations.convertAndSend(
+                "/secured/user/queue/specific-user-user" + playersInRoom.get(player), message);
+    }
+
+    private void sendFinish(Long playerId) {
+        var player = playerService.getByIdOrBlow(playerId);
+        var message = new MessageResponse();
+        message.setType(MessageType.FINISH);
         message.setContent(playerService.getByIdOrBlow(player.getId()).getTokens().toString());
         message.setSender(player.getName());
         simpMessageSendingOperations.convertAndSend(
