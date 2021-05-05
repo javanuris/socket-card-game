@@ -16,7 +16,6 @@ demo: https://www.youtube.com/watch?v=xmC47ePi8eg&ab_channel=NurisArt
 ## Launch the solution:
 - ./gradlew bootRun
  
-## Optional Tasks:
 - Add a client UI (command line or graphical)
 - Handle player disconnects (consider allowing reconnecting to a running game and games timing out)
 
