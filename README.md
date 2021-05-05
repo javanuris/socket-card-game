@@ -1,4 +1,4 @@
-# CARD GAME
+# CARD GAME (Socket in practice)
 ## _CARD GAME WITH 2 GAME TYPES: SINGLE AND DOUBLE_
 demo: https://www.youtube.com/watch?v=xmC47ePi8eg&ab_channel=NurisArt
 
